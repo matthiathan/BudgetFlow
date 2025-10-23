@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import type { SavingsGoal } from '@/types';
+import { useCurrency } from '@/hooks/useCurrency';
 
 interface SavingsActionDialogProps {
   open: boolean;
@@ -16,6 +17,7 @@ interface SavingsActionDialogProps {
 }
 
 export function SavingsActionDialog({ open, onOpenChange, goal, action }: SavingsActionDialogProps) {
+  const { formatCurrency } = useCurrency();
   const [amount, setAmount] = useState('');
   const queryClient = useQueryClient();
 
@@ -119,22 +121,22 @@ export function SavingsActionDialog({ open, onOpenChange, goal, action }: Saving
             />
             <p className="text-xs text-muted-foreground">
               {action === 'contribute' 
-                ? `Maximum: $${maxAmount.toFixed(2)} (to reach target)`
-                : `Available: $${maxAmount.toFixed(2)}`}
+                ? `Maximum: ${formatCurrency(maxAmount)} (to reach target)`
+                : `Available: ${formatCurrency(maxAmount)}`}
             </p>
           </div>
 
           <div className="bg-secondary/50 p-3 rounded-lg space-y-1 text-sm">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Current Amount:</span>
-              <span className="font-medium">${Number(goal?.current_amount || 0).toFixed(2)}</span>
+              <span className="font-medium">{formatCurrency(Number(goal?.current_amount || 0))}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">
                 {action === 'contribute' ? 'After Contribution:' : 'After Withdrawal:'}
               </span>
               <span className="font-medium">
-                ${(Number(goal?.current_amount || 0) + (action === 'contribute' ? Number(amount || 0) : -Number(amount || 0))).toFixed(2)}
+                {formatCurrency(Number(goal?.current_amount || 0) + (action === 'contribute' ? Number(amount || 0) : -Number(amount || 0)))}
               </span>
             </div>
           </div>

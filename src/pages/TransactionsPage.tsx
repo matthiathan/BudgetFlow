@@ -8,8 +8,10 @@ import { TransactionDialog } from '@/components/features/TransactionDialog';
 import { toast } from 'sonner';
 import type { Transaction } from '@/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useCurrency } from '@/hooks/useCurrency';
 
 export function TransactionsPage() {
+  const { formatCurrency } = useCurrency();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [filterType, setFilterType] = useState<'all' | 'income' | 'expense'>('all');
@@ -126,7 +128,7 @@ export function TransactionsPage() {
                   </div>
                   <div className="flex items-center gap-4">
                     <p className={`text-lg font-bold ${transaction.type === 'income' ? 'text-chart-2' : 'text-destructive'}`}>
-                      {transaction.type === 'income' ? '+' : '-'}${Number(transaction.amount).toFixed(2)}
+                      {transaction.type === 'income' ? '+' : '-'}{formatCurrency(Number(transaction.amount))}
                     </p>
                     <div className="flex gap-2">
                       <Button

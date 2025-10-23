@@ -5,10 +5,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useState } from 'react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear, format, eachDayOfInterval, eachMonthOfInterval } from 'date-fns';
+import { useCurrency } from '@/hooks/useCurrency';
 
 const CHART_COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))'];
 
 export function AnalyticsPage() {
+  const { formatCurrency } = useCurrency();
   const [timeRange, setTimeRange] = useState<'week' | 'month' | 'year'>('month');
   
   const { data: transactions = [] } = useQuery({
@@ -110,7 +112,7 @@ export function AnalyticsPage() {
             <CardTitle className="text-sm font-medium">Total Income</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-chart-2">${totalIncome.toFixed(2)}</div>
+            <div className="text-2xl font-bold text-chart-2">{formatCurrency(totalIncome)}</div>
           </CardContent>
         </Card>
 
@@ -119,7 +121,7 @@ export function AnalyticsPage() {
             <CardTitle className="text-sm font-medium">Total Expenses</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-destructive">${totalExpenses.toFixed(2)}</div>
+            <div className="text-2xl font-bold text-destructive">{formatCurrency(totalExpenses)}</div>
           </CardContent>
         </Card>
 
@@ -129,7 +131,7 @@ export function AnalyticsPage() {
           </CardHeader>
           <CardContent>
             <div className={`text-2xl font-bold ${netSavings >= 0 ? 'text-chart-2' : 'text-destructive'}`}>
-              ${netSavings.toFixed(2)}
+              {formatCurrency(netSavings)}
             </div>
           </CardContent>
         </Card>

@@ -10,8 +10,10 @@ import { SavingsActionDialog } from '@/components/features/SavingsActionDialog';
 import { toast } from 'sonner';
 import type { SavingsGoal } from '@/types';
 import { format, differenceInDays } from 'date-fns';
+import { useCurrency } from '@/hooks/useCurrency';
 
 export function SavingsPage() {
+  const { formatCurrency } = useCurrency();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingGoal, setEditingGoal] = useState<SavingsGoal | null>(null);
   const [actionDialogOpen, setActionDialogOpen] = useState(false);
@@ -80,7 +82,7 @@ export function SavingsPage() {
             <CardTitle className="text-sm font-medium">Total Savings</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-chart-1">${totalSavings.toFixed(2)}</div>
+            <div className="text-2xl font-bold text-chart-1">{formatCurrency(totalSavings)}</div>
             <p className="text-xs text-muted-foreground">Across {savingsGoals.length} goals</p>
           </CardContent>
         </Card>
@@ -90,7 +92,7 @@ export function SavingsPage() {
             <CardTitle className="text-sm font-medium">Total Target</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${totalTarget.toFixed(2)}</div>
+            <div className="text-2xl font-bold">{formatCurrency(totalTarget)}</div>
             <p className="text-xs text-muted-foreground">
               {totalTarget > 0 ? `${((totalSavings / totalTarget) * 100).toFixed(1)}% complete` : 'Set your first goal'}
             </p>
@@ -137,11 +139,11 @@ export function SavingsPage() {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Current</span>
-                      <span className="font-medium">${Number(goal.current_amount).toFixed(2)}</span>
+                      <span className="font-medium">{formatCurrency(Number(goal.current_amount))}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Target</span>
-                      <span className="font-medium">${Number(goal.target_amount).toFixed(2)}</span>
+                      <span className="font-medium">{formatCurrency(Number(goal.target_amount))}</span>
                     </div>
                     {goal.deadline && (
                       <div className="flex justify-between">

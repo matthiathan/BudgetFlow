@@ -4,10 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DollarSign, TrendingUp, TrendingDown, PiggyBank } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { format, subDays, startOfMonth, endOfMonth } from 'date-fns';
+import { useCurrency } from '@/hooks/useCurrency';
 
 const CHART_COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))'];
 
 export function DashboardPage() {
+  const { formatCurrency } = useCurrency();
+  
   const { data: transactions = [] } = useQuery({
     queryKey: ['transactions'],
     queryFn: transactionsApi.getAll,
@@ -73,7 +76,7 @@ export function DashboardPage() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${totalBalance.toFixed(2)}</div>
+            <div className="text-2xl font-bold">{formatCurrency(totalBalance)}</div>
             <p className="text-xs text-muted-foreground">Current balance</p>
           </CardContent>
         </Card>
@@ -84,7 +87,7 @@ export function DashboardPage() {
             <TrendingUp className="h-4 w-4 text-chart-2" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-chart-2">${totalIncome.toFixed(2)}</div>
+            <div className="text-2xl font-bold text-chart-2">{formatCurrency(totalIncome)}</div>
             <p className="text-xs text-muted-foreground">All time</p>
           </CardContent>
         </Card>
@@ -95,7 +98,7 @@ export function DashboardPage() {
             <TrendingDown className="h-4 w-4 text-destructive" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-destructive">${totalExpenses.toFixed(2)}</div>
+            <div className="text-2xl font-bold text-destructive">{formatCurrency(totalExpenses)}</div>
             <p className="text-xs text-muted-foreground">All time</p>
           </CardContent>
         </Card>
@@ -106,7 +109,7 @@ export function DashboardPage() {
             <PiggyBank className="h-4 w-4 text-chart-1" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-chart-1">${totalSavings.toFixed(2)}</div>
+            <div className="text-2xl font-bold text-chart-1">{formatCurrency(totalSavings)}</div>
             <p className="text-xs text-muted-foreground">{savingsGoals.length} goals</p>
           </CardContent>
         </Card>
@@ -188,7 +191,7 @@ export function DashboardPage() {
                   </div>
                   <div className="text-right">
                     <p className={`font-bold ${transaction.type === 'income' ? 'text-chart-2' : 'text-destructive'}`}>
-                      {transaction.type === 'income' ? '+' : '-'}${Number(transaction.amount).toFixed(2)}
+                      {transaction.type === 'income' ? '+' : '-'}{formatCurrency(Number(transaction.amount))}
                     </p>
                     <p className="text-sm text-muted-foreground">{transaction.date}</p>
                   </div>
