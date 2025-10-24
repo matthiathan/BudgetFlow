@@ -8,9 +8,10 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { format } from 'date-fns';
+import { LogOut } from 'lucide-react';
 
 export function ProfilePage() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const queryClient = useQueryClient();
   const [username, setUsername] = useState('');
   
@@ -37,6 +38,16 @@ export function ProfilePage() {
       return;
     }
     updateMutation.mutate({ username });
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast.success('Signed out successfully');
+    } catch (error) {
+      toast.error('Failed to sign out');
+      console.error('Sign out error:', error);
+    }
   };
 
   return (
@@ -89,6 +100,19 @@ export function ProfilePage() {
             </div>
             <Button type="submit">Update Username</Button>
           </form>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Account Actions</CardTitle>
+          <CardDescription>Sign out of your account</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button variant="destructive" onClick={handleSignOut} className="gap-2">
+            <LogOut className="h-4 w-4" />
+            Sign Out
+          </Button>
         </CardContent>
       </Card>
     </div>

@@ -7,14 +7,11 @@ import {
   BarChart3, 
   Settings, 
   User,
-  LogOut,
   Menu,
   X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/hooks/useAuth';
 import { useState } from 'react';
-import { toast } from 'sonner';
 
 const navItems = [
   { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -28,18 +25,7 @@ const navItems = [
 
 export function Sidebar() {
   const location = useLocation();
-  const { signOut } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-      toast.success('Signed out successfully');
-    } catch (error) {
-      toast.error('Failed to sign out');
-      console.error('Sign out error:', error);
-    }
-  };
 
   return (
     <>
@@ -96,18 +82,6 @@ export function Sidebar() {
               );
             })}
           </nav>
-
-          {/* Sign out */}
-          <div className="border-t border-border p-4">
-            <Button
-              variant="ghost"
-              className="w-full justify-start gap-3 text-muted-foreground hover:text-foreground"
-              onClick={handleSignOut}
-            >
-              <LogOut className="h-5 w-5" />
-              Sign Out
-            </Button>
-          </div>
         </div>
       </aside>
     </>
